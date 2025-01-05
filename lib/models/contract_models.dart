@@ -1,14 +1,12 @@
 class Contract {
+  // before journey
   String id;
-  String vehicleType;
   String driverName;
-  String time;
-  int image;
-  bool isDon;
+  String vehicleType;
   String licensePlate;
-  String fin;
+  String date;
+  String startTime;
   String street;
-  String streetNumber;
   String plz;
   String keyNumber;
   String mileage;
@@ -20,21 +18,23 @@ class Contract {
   String rearRight;
   String transferorName;
   String transferorEmail;
-  String startTime;
-  String endTime;
-  String date;
+
+  bool isDon;
+
+  // after journey
+  String finalMileage;
+  String finalRemarks;
 
   Contract(
+
+    // before journey
     this.id,
-    this.vehicleType,
     this.driverName,
-    this.time,
-    this.image,
-    this.isDon,
+    this.vehicleType,
     this.licensePlate,
-    this.fin,
+    this.date,
+    this.startTime,
     this.street,
-    this.streetNumber,
     this.plz,
     this.keyNumber,
     this.mileage,
@@ -46,8 +46,12 @@ class Contract {
     this.rearRight,
     this.transferorName,
     this.transferorEmail,
-    this.startTime,
-    this.endTime,
-    this.date,
+    
+
+    this.isDon,
+
+    // after journey
+    this.finalMileage,
+    this.finalRemarks,
   );
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:karltransportapp/auth/main.dart';
 import 'package:karltransportapp/components/info_card.dart';
 import 'package:karltransportapp/screens/add_contract_screen.dart';
 import 'package:karltransportapp/screens/completed_contracts_screen.dart';
+import 'package:karltransportapp/screens/profile_screen.dart'; // Ensure ProfileScreen is imported
 import 'package:karltransportapp/themes/colors.dart';
 import 'package:karltransportapp/widgets/stream_contract.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase authentication import
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,26 +27,42 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     // Navigate to the selected screen
     if (index == 0) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+      // Stay on HomeScreen, no action needed
     } else if (index == 1) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const CompletedContractsScreen()));
+    } else if (index == 2) {
+      // Navigate to ProfileScreen
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      );
+    }
+  }
+
+  // Logout function
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();  // Sign out from Firebase
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const AuthPage()), // Navigate to Login screen
+      );
+    } catch (e) {
+      // Handle any errors, such as network issues or failures to sign out
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error signing out. Please try again.')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    bool isMobile = screenWidth < 600;
-
     return Scaffold(
       bottomNavigationBar: GNav(
         backgroundColor: const Color(0xFF17203A),
         color: Colors.white,
         activeColor: Colors.white,
         gap: 8,
-        selectedIndex: _selectedIndex, // Update the selected index
+        selectedIndex: _selectedIndex,
         onTabChange: (index) {
           _onItemTapped(index);
         },
@@ -56,8 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icons.document_scanner,
             text: 'Completed',
           ),
-          GButton(icon: Icons.person, text: 'Profile'),
-          // GButton(icon: Icons.settings, text: 'Settings'),
+          GButton(icon: Icons.person, text: 'Profile'), // Profile tab
         ],
       ),
       backgroundColor: backgroundColor,
@@ -98,17 +116,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
               leading: const Icon(Icons.home, color: Colors.white),
               title: const Text('Home', style: TextStyle(color: Colors.white)),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
               leading: const Icon(Icons.person, color: Colors.white),
               title: const Text('Profile', style: TextStyle(color: Colors.white)),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                logout();  // Call logout function
+              },
               leading: const Icon(Icons.logout, color: Colors.white),
               title: const Text('Logout', style: TextStyle(color: Colors.white)),
             ),
@@ -119,8 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
         visible: show,
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AddContractScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddContractScreen()));
           },
           backgroundColor: custom_green,
           child: const Icon(Icons.add, size: 30, color: Colors.white),
@@ -141,33 +168,17 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return true;
           },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 16.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
-                  child: Container(
-                    width: double.infinity,
-                    height: isMobile ? 200 : 300, // Responsive height
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      borderRadius: BorderRadius.circular(20), // Adjust radius here
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Your Large Responsive Container',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: StreamContract(false),
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              const SizedBox(height: 16.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: StreamContract(false), // StreamContract now takes full available space
+              ),
+            ],
           ),
         ),
       ),

@@ -6,284 +6,306 @@ import 'package:karltransportapp/themes/colors.dart';
 import 'package:karltransportapp/widgets/custom_text_field.dart';
 
 class EditContractScreen extends StatefulWidget {
-  final Contract _contract;
+  final Contract contract;
 
-  const EditContractScreen(this._contract, {super.key});
+  const EditContractScreen(this.contract, {super.key});
 
   @override
   State<EditContractScreen> createState() => _EditContractScreenState();
 }
 
 class _EditContractScreenState extends State<EditContractScreen> {
-  TextEditingController? driverName;
-  TextEditingController? vehicleType;
-  TextEditingController? licensePlateController;
-  TextEditingController? finController;
-  TextEditingController? streetController;
-  TextEditingController? streetNumberController;
-  TextEditingController? plzController;
-  TextEditingController? keyNumberController;
-  TextEditingController? mileageController;
-  TextEditingController? remarksController;
-  TextEditingController? seatNumberController;
-  TextEditingController? frontLeftController;
-  TextEditingController? frontRightController;
-  TextEditingController? rearLeftController;
-  TextEditingController? rearRightController;
-  TextEditingController? transferorNameController;
-  TextEditingController? transferorEmailController;
-  TextEditingController? startTimeController;
-  TextEditingController? endTimeController;
-  TextEditingController? dateController;
+  // Before Journey Controllers
+  late TextEditingController driverName;
+  late TextEditingController vehicleType;
+  late TextEditingController licensePlate;
+  late TextEditingController date;
+  late TextEditingController startTime;
+  late TextEditingController street;
+  late TextEditingController plz;
+  late TextEditingController keyNumber;
+  late TextEditingController mileage;
+  late TextEditingController remarks;
+  late TextEditingController seatNumber;
+  late TextEditingController frontLeft;
+  late TextEditingController frontRight;
+  late TextEditingController rearLeft;
+  late TextEditingController rearRight;
+  late TextEditingController transferorName;
+  late TextEditingController transferorEmail;
+  
 
-
-  final FocusNode _focusNode1 = FocusNode();
-  final FocusNode _focusNode2 = FocusNode();
-  final FocusNode _focusNode3 = FocusNode();
-  final FocusNode _focusNode4 = FocusNode();
-  final FocusNode _focusNode5 = FocusNode();
-  final FocusNode _focusNode6 = FocusNode();
-  final FocusNode _focusNode7 = FocusNode();
-  final FocusNode _focusNode8 = FocusNode();
-  final FocusNode _focusNode9 = FocusNode();
-  final FocusNode _focusNode10 = FocusNode();
-  final FocusNode _focusNode11 = FocusNode();
-  final FocusNode _focusNode12 = FocusNode();
-  final FocusNode _focusNode13 = FocusNode();
-  final FocusNode _focusNode14 = FocusNode();
-  final FocusNode _focusNode15 = FocusNode();
-  final FocusNode _focusNode16 = FocusNode();
-  final FocusNode _focusNode17 = FocusNode();
-  final FocusNode _focusNode18 = FocusNode();
-  final FocusNode _focusNode19 = FocusNode();
-  final FocusNode _focusNode20 = FocusNode();
-  final FocusNode _focusNode21 = FocusNode();
-  final FocusNode _focusNode22 = FocusNode();
+  // After Journey Controllers
+  late TextEditingController finalMileage;
+  late TextEditingController finalRemarks;
 
   DateTime selectedDate = DateTime.now();
-  String startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
-  String endTime = DateFormat('hh:mm a')
-      .format(DateTime.now().add(const Duration(minutes: 15)))
-      .toString();
+  String initialStartTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
+  String initialEndTime = DateFormat('hh:mm a').format(DateTime.now().add(const Duration(minutes: 15))).toString();
 
-  int indexx = 0;
 
   @override
   void initState() {
     super.initState();
-    driverName = TextEditingController(text: widget._contract.driverName);
-    vehicleType = TextEditingController(text: widget._contract.vehicleType);
-    licensePlateController = TextEditingController(text: widget._contract.licensePlate);
-    finController = TextEditingController(text: widget._contract.fin);
-    streetController = TextEditingController(text: widget._contract.street);
-    streetNumberController = TextEditingController(text: widget._contract.streetNumber);
-    plzController = TextEditingController(text: widget._contract.plz);
-    keyNumberController = TextEditingController(text: widget._contract.keyNumber);
-    mileageController = TextEditingController(text: widget._contract.mileage);
-    remarksController = TextEditingController(text: widget._contract.remarks);
-    seatNumberController = TextEditingController(text: widget._contract.seatNumber);
-    frontLeftController = TextEditingController(text: widget._contract.frontLeft);
-    frontRightController = TextEditingController(text: widget._contract.frontRight);
-    rearLeftController = TextEditingController(text: widget._contract.rearLeft);
-    rearRightController = TextEditingController(text: widget._contract.rearRight);
-    transferorNameController = TextEditingController(text: widget._contract.transferorName);
-    transferorEmailController = TextEditingController(text: widget._contract.transferorEmail);
-    startTimeController = TextEditingController(text: widget._contract.startTime);
-    endTimeController = TextEditingController(text: widget._contract.endTime);
-    dateController = TextEditingController(text: widget._contract.date);
+
+    // before journey
+    driverName = TextEditingController(text: widget.contract.driverName);
+    vehicleType = TextEditingController(text: widget.contract.vehicleType);
+    licensePlate = TextEditingController(text: widget.contract.licensePlate);
+    date = TextEditingController(text: widget.contract.date);
+    startTime = TextEditingController(text: widget.contract.startTime);
+    street = TextEditingController(text: widget.contract.street);
+    plz = TextEditingController(text: widget.contract.plz);
+    keyNumber = TextEditingController(text: widget.contract.keyNumber);
+    mileage = TextEditingController(text: widget.contract.mileage);
+    remarks = TextEditingController(text: widget.contract.remarks);
+    seatNumber = TextEditingController(text: widget.contract.seatNumber);
+    frontLeft = TextEditingController(text: widget.contract.frontLeft);
+    frontRight = TextEditingController(text: widget.contract.frontRight);
+    rearLeft = TextEditingController(text: widget.contract.rearLeft);
+    rearRight = TextEditingController(text: widget.contract.rearRight);
+    transferorName = TextEditingController(text: widget.contract.transferorName);
+    transferorEmail = TextEditingController(text: widget.contract.transferorEmail);
+
+
+    // after journey
+    finalMileage = TextEditingController(text: widget.contract.finalMileage);
+    finalRemarks = TextEditingController(text: widget.contract.finalRemarks);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding as needed
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Date',
-                  controller: dateController!,
-                  hintText: 'Select Date', // Add a hintText
-                  focusNode: _focusNode20, // Add a focusNode
-                  widget: IconButton(
-                    onPressed: () => _getDateFromUser(),
-                    icon: const Icon(
-                      Icons.calendar_today_outlined,
-                      color: Colors.grey,
-                    ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF17203A),
+          title: const Text('Contract Details'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.departure_board,
+                  color: Colors.white,
                   ),
+                text: 'Before Journey'
                 ),
-                Row(
-                    children: [
-                      // Start Time Input Field
-                      Expanded(
-                        child: CustomTextField(
-                          focusNode: _focusNode18,
-                          controller: startTimeController!,
-                          title: 'Start Time',
-                          hintText: 'Select Time',
-                          widget: IconButton(
-                            onPressed: () => _getTimeFromUser(isStartTime: true),
-                            icon: const Icon(
-                              Icons.access_time_rounded,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      
-                      // End Time Input Field
-                      Expanded(
-                        child: CustomTextField(
-                          focusNode: _focusNode19,
-                          title: 'End Time',
-                          hintText: 'Select Time',
-                          controller: endTimeController!,
-                          widget: IconButton(
-                            onPressed: () => _getTimeFromUser(isStartTime: false),
-                            icon: const Icon(
-                              Icons.access_time_rounded,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              Tab(
+                icon: Icon(
+                  Icons.access_time_filled_rounded,
+                  color: Colors.white,
                   ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Driver Name',
-                  controller: driverName!,
-                  focusNode: _focusNode1,
-                  hintText: 'Driver Name',
+                text: 'After Journey'
                 ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Vehicle Type',
-                  controller: vehicleType!,
-                  focusNode: _focusNode2,
-                  hintText: 'Vehicle Type',
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'License Plate',
-                  controller: licensePlateController!,
-                  hintText: 'License Plate',
-                  focusNode: _focusNode3,
-                ),
-                const SizedBox(height: 30),
-                imageSlides(),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'FIN',
-                  controller: finController!,
-                  hintText: 'FIN',
-                  focusNode: _focusNode4,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Street',
-                  controller: streetController!,
-                  hintText: 'Street',
-                  focusNode: _focusNode5,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Street Number',
-                  controller: streetNumberController!,
-                  hintText: 'Street Number',
-                  focusNode: _focusNode6,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'PLZ',
-                  controller: plzController!,
-                  hintText: 'PLZ',
-                  focusNode: _focusNode7,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Key Number',
-                  controller: keyNumberController!,
-                  hintText: 'Key Number',
-                  focusNode: _focusNode8,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Mileage',
-                  controller: mileageController!,
-                  hintText: 'Mileage',
-                  focusNode: _focusNode9,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Remarks',
-                  controller: remarksController!,
-                  hintText: 'Remarks',
-                  focusNode: _focusNode10,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Number of Seats',
-                  controller: seatNumberController!,
-                  hintText: 'Number of Seats',
-                  focusNode: _focusNode11,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Front Left in mm',
-                  controller: frontLeftController!,
-                  hintText: 'Front Left in mm',
-                  focusNode: _focusNode12,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Front Left in mm',
-                  controller: frontRightController!,
-                  hintText: 'Front Left in mm',
-                  focusNode: _focusNode13,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Rear Left in mm',
-                  controller: rearLeftController!,
-                  hintText: 'Rear Left in mm',
-                  focusNode: _focusNode14,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Rear Right in mm',
-                  controller: rearRightController!,
-                  hintText: 'Rear Right in mm',
-                  focusNode: _focusNode15,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Name of Transferor',
-                  controller: transferorNameController!,
-                  hintText: 'Name of Transferor',
-                  focusNode: _focusNode16,
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Email of Transferor',
-                  controller: transferorEmailController!,
-                  hintText: 'Email of Transferor',
-                  focusNode: _focusNode17,
-                ),
-                const SizedBox(height: 20),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            buildBeforeJourneyTab(),
+            buildAfterJourneyTab(),
+          ],
+        ),
+      ),
+    );
+  }
 
-                buttons(),
-              ],
+  Widget buildBeforeJourneyTab() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const SizedBox(height: 20),
+
+        CustomTextField(
+          title: 'Date',
+          controller: startTime, // Dynamically updates with the selected date
+          hintText: 'Select Date',
+          focusNode: FocusNode(),
+          widget: IconButton(
+            onPressed: () async {
+              await _getDateFromUser(); // Fetch the selected date
+              date.text = DateFormat('yyyy-MM-dd').format(selectedDate); // Update the controller with the formatted date
+            },
+            icon: const Icon(
+              Icons.calendar_today_outlined,
+              color: Colors.grey,
             ),
           ),
         ),
+
+
+          const SizedBox(height: 20),
+
+          CustomTextField(
+            focusNode: FocusNode(),
+            controller: date, // Dynamically updates with the selected time
+            title: 'Start Time',
+            hintText: 'Select Time',
+            widget: IconButton(
+              onPressed: () async {
+                await _getTimeFromUser(isStartTime: true); // Fetch the selected time
+                startTime.text = initialStartTime; // Update the controller with the selected time
+              },
+              icon: const Icon(
+                Icons.access_time_rounded,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+
+
+          CustomTextField(
+            title: 'Driver Name',
+            controller: driverName,
+            focusNode: FocusNode(),
+            hintText: 'Enter driver name',
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Vehicle Type',
+            controller: vehicleType,
+            focusNode: FocusNode(),
+            hintText: 'Enter vehicle type',
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'License Plate',
+            controller: licensePlate,
+            focusNode: FocusNode(),
+            hintText: 'Enter license plate',
+          ),
+
+
+          const SizedBox(height: 20),
+
+          CustomTextField(
+            title: 'Street',
+            controller: street,
+            hintText: 'Street',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+
+          CustomTextField(
+            title: 'PLZ',
+            controller: plz,
+            hintText: 'PLZ',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+
+          CustomTextField(
+            title: 'Key Number',
+            controller: keyNumber,
+            hintText: 'Key Number',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Mileage',
+            controller: mileage,
+            hintText: 'Mileage',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Remarks',
+            controller: remarks,
+            hintText: 'Remarks',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Number of Seats',
+            controller: seatNumber,
+            hintText: 'Number of Seats',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Front Left in mm',
+            controller: frontLeft,
+            hintText: 'Front Left in mm',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Front Right in mm',
+            controller: frontRight,
+            hintText: 'Front Right in mm',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Rear Left in mm',
+            controller: rearLeft,
+            hintText: 'Rear Left in mm',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Rear Right in mm',
+            controller: rearRight,
+            hintText: 'Rear Right in mm',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Name of Transferor',
+            controller: transferorName,
+            hintText: 'Name of Transferor',
+            focusNode: FocusNode(),
+          ),
+
+          const SizedBox(height: 20),
+          CustomTextField(
+            title: 'Email of Transferor',
+            controller: transferorEmail,
+            hintText: 'Email of Transferor',
+            focusNode: FocusNode(),
+          ),
+
+          // buildDateAndTimePickers(),
+          const SizedBox(height: 20),
+          buttons(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAfterJourneyTab() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          const SizedBox(height: 20),
+        CustomTextField(
+          title: 'Final Mileage',
+          controller: finalMileage,
+          focusNode: FocusNode(),
+          hintText: 'Enter final mileage',
+        ),
+        const SizedBox(height: 20),
+        CustomTextField(
+          title: 'Final Remarks',
+          focusNode: FocusNode(),
+          controller: finalRemarks,
+          hintText: 'Enter final remarks',
+        ),
+          const SizedBox(height: 20),
+          buttons(),
+        ],
       ),
     );
   }
@@ -293,44 +315,43 @@ class _EditContractScreenState extends State<EditContractScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: custom_green,
-            minimumSize: const Size(170, 48),
-          ),
+          style: ElevatedButton.styleFrom(backgroundColor: custom_green),
           onPressed: () {
             FirestoreDatasource().updateContract(
-              widget._contract.id,
-              indexx,
-              driverName!.text,
-              vehicleType!.text,
-              licensePlateController!.text,
-              finController!.text,
-              streetController!.text,
-              streetNumberController!.text,
-              plzController!.text,
-              keyNumberController!.text,
-              mileageController!.text,
-              remarksController!.text,
-              seatNumberController!.text,
-              frontLeftController!.text,
-              frontRightController!.text,
-              rearLeftController!.text,
-              rearRightController!.text,
-              transferorNameController!.text,
-              transferorEmailController!.text,
-              startTimeController!.text,
-              endTimeController!.text,
-              dateController!.text,
+              widget.contract.id,
+
+              // Before Journey Data
+              driverName.text,
+              vehicleType.text,
+              licensePlate.text,
+              date.text,
+              startTime.text,
+              street.text,
+              plz.text,
+              keyNumber.text,
+              mileage.text,
+              remarks.text,
+              seatNumber.text,
+              frontLeft.text,
+              frontRight.text,
+              rearLeft.text,
+              rearRight.text,
+              transferorName.text,
+              transferorEmail.text,
+
+
+
+              // After Journey Data
+              finalMileage.text,
+              finalRemarks.text,
+              
             );
             Navigator.pop(context);
           },
           child: const Text('Save'),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            minimumSize: const Size(170, 48),
-          ),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -340,99 +361,37 @@ class _EditContractScreenState extends State<EditContractScreen> {
     );
   }
 
-  Widget imageSlides() {
-    return SizedBox(
-      height: 180,
-      child: ListView.builder(
-        itemCount: 6,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                indexx = index;
-              });
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  width: 2,
-                  color: indexx == index ? custom_green : Colors.grey,
-                ),
-              ),
-              width: 140,
-              margin: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Image.asset('images/$index.png'),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-
-// Function to pick a date from the date picker
-_getDateFromUser() async {
-  DateTime? pickedDate = await showDatePicker(
+  Future<void> _getDateFromUser () async {
+    DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2015),
-      lastDate: DateTime(2121));
-
-  if (pickedDate != null && pickedDate != selectedDate) {
-    setState(() {
-      selectedDate = pickedDate;
-      dateController?.text = DateFormat('yyyy-MM-dd').format(selectedDate); // Format date and set in controller
-    });
-  }
-}
-
-// Function to get time from the user, either for Start Time or End Time
-_getTimeFromUser({required bool isStartTime}) async {
-  var pickedTime = await _showTimePicker(isStartTime: isStartTime);
-
-  if (pickedTime != null) {
-    String formattedTime = pickedTime.format(context);
-
-    setState(() {
-      if (isStartTime) {
-        startTime = formattedTime;
-        startTimeController?.text = startTime; // Set start time in controller
-      } else {
-        endTime = formattedTime;
-        endTimeController?.text = endTime; // Set end time in controller
-      }
-    });
-  }
-}
-
-
-// Show the time picker
-_showTimePicker({required bool isStartTime}) {
-  TimeOfDay initialTime = TimeOfDay.now(); // Default to current time
-
-  // Set initialTime based on whether it's for start time or end time
-  if (isStartTime && startTime.isNotEmpty) {
-    initialTime = TimeOfDay(
-      hour: int.parse(startTime.split(':')[0]),
-      minute: int.parse(startTime.split(':')[1].split(' ')[0]),
+      lastDate: DateTime(2121),
     );
-  } else if (!isStartTime && endTime.isNotEmpty) {
-    initialTime = TimeOfDay(
-      hour: int.parse(endTime.split(':')[0]),
-      minute: int.parse(endTime.split(':')[1].split(' ')[0]),
-    );
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+        date.text = DateFormat('yyyy-MM-dd').format(selectedDate); // Update the date controller here
+      });
+    }
   }
 
-  return showTimePicker(
-    initialEntryMode: TimePickerEntryMode.input,
-    context: context,
-    initialTime: initialTime,
-  );
-}
+  Future<void> _getTimeFromUser ({required bool isStartTime}) async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        if (isStartTime) {
+          initialStartTime = pickedTime.format(context);
+          startTime.text = initialStartTime; // Update the startTime controller here
+        } else {
+          // If you have an end time controller, you can update it here
+          // endTime.text = pickedTime.format(context);
+        }
+      });
+    }
+  }
+
 }

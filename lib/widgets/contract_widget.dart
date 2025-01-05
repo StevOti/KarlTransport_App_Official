@@ -110,10 +110,14 @@ class _ContractWidgetState extends State<ContractWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: Row(
                   children: [
-                    const Icon(Icons.timer, size: 16),
+                    const Icon(
+                      Icons.timer,
+                      size: 16,
+                      color: Colors.white,
+                    ),
                     const SizedBox(width: 5),
                     Text(
-                      widget._contract.time,
+                      widget._contract.date,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -169,10 +173,10 @@ class _ContractWidgetState extends State<ContractWidget> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: AssetImage('images/${widget._contract.image}.png'), // Add path for asset image
-          fit: BoxFit.cover,
-        ),
+        // image: DecorationImage(
+        //   image: AssetImage('images/${widget._contract.image}.png'), // Add path for asset image
+        //   fit: BoxFit.cover,
+        // ),
       ),
     );
   }
