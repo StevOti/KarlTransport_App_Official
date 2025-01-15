@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:karltransportapp/auth/main.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Get the currently signed-in user
+    final User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF17203A),
@@ -20,51 +25,51 @@ class ProfileScreen extends StatelessWidget {
             const CircleAvatar(
               radius: 60,
               backgroundImage: NetworkImage(
-                'https://www.example.com/profile_image.jpg', // Replace with actual user profile image URL
+                'https://www.example.com/profile_image.jpg', // Replace with actual profile image URL if available
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // User Info
-            const Text(
-              'John Doe', // Replace with user's name
-              style: TextStyle(
+            Text(
+              user?.displayName ?? 'User Name', // Display user's name or fallback to a default
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'john.doe@example.com', // Replace with user's email
-              style: TextStyle(
+            Text(
+              user?.email ?? 'User Email', // Display user's email or fallback to a default
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Edit Button
             ElevatedButton(
               onPressed: () {
-                // Navigate to edit profile screen
-                // For now, we just print a message
                 print("Edit Profile");
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Customize color if needed
+                backgroundColor: Colors.blue,
               ),
               child: const Text('Edit Profile'),
             ),
             const SizedBox(height: 16),
-            
+
             // Logout Button
             ElevatedButton(
               onPressed: () {
-                // Handle logout action
-                print("Logout");
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const AuthPage()),
+                );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, // Customize color for logout button
+                backgroundColor: Colors.red,
               ),
               child: const Text('Logout'),
             ),

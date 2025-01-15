@@ -13,170 +13,194 @@ class ContractWidget extends StatefulWidget {
   State<ContractWidget> createState() => _ContractWidgetState();
 }
 
-
 class _ContractWidgetState extends State<ContractWidget> {
+  late bool _isDone;
+
+  @override
+  void initState() {
+    super.initState();
+    _isDone = widget._contract.isDon;
+  }
+
+  void _toggleContractStatus() {
+    setState(() {
+      _isDone = !_isDone;
+    });
+    FirestoreDatasource().isdone(widget._contract.id, _isDone);
+  }
+
+  void _navigateToEdit() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditContractScreen(widget._contract),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isDone = widget._contract.isDon;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: Container(
-        width: double.infinity,
-        height: 150,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 2),
-            )
-          ],
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              contractImage(),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Limiting text width with flexible and overflow ellipsis
-                        Flexible(
-                          child: Text(
-                            widget._contract.driverName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Checkbox(
-                          value: isDone,
-                          onChanged: (value) {
-                            setState(() {
-                              isDone = !isDone;
-                            });
-                            FirestoreDatasource().isdone(widget._contract.id, isDone);
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      widget._contract.vehicleType,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey.shade400,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    editTime(),
-                  ],
-                ),
-              ),
-            ],
+        child: InkWell(
+          onTap: _navigateToEdit,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 12),
+                _buildContractDetails(),
+                const SizedBox(height: 12),
+                _buildActionBar(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Padding editTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          // Ensuring responsiveness for containers
-          Flexible(
-            child: Container(
-              height: 28,
-              decoration: BoxDecoration(
-                color: custom_green,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.timer,
-                      size: 16,
-                      color: Colors.white,
+  Widget _buildHeader() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _ContractAvatar(contractType: widget._contract.vehicleType),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget._contract.driverName,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget._contract.date,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
+              const SizedBox(height: 4),
+              Text(
+                widget._contract.vehicleType,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.grey.shade600,
+                    ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          Flexible(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditContractScreen(widget._contract)));
-              },
-              child: Container(
-                height: 28,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit, size: 16),
-                      SizedBox(width: 5),
-                      Text(
-                        'edit',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+        ),
+        _StatusCheckbox(
+          value: _isDone,
+          onChanged: (value) => _toggleContractStatus(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContractDetails() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.calendar_today,
+            size: 16,
+            color: Colors.grey.shade700,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            widget._contract.date,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),
     );
   }
 
-  Container contractImage() {
+  Widget _buildActionBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton.icon(
+          onPressed: _navigateToEdit,
+          icon: const Icon(Icons.edit_outlined),
+          label: const Text('Edit Contract'),
+          style: TextButton.styleFrom(
+            foregroundColor: custom_green,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ContractAvatar extends StatelessWidget {
+  final String contractType;
+
+  const _ContractAvatar({
+    required this.contractType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 130,
-      width: 80, // Reduced width for better fit
+      width: 60,
+      height: 60,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        // image: DecorationImage(
-        //   image: AssetImage('images/${widget._contract.image}.png'), // Add path for asset image
-        //   fit: BoxFit.cover,
-        // ),
+        color: custom_green.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(
+        _getVehicleIcon(),
+        color: custom_green,
+        size: 32,
+      ),
+    );
+  }
+
+  IconData _getVehicleIcon() {
+    // You can customize this based on your vehicle types
+    switch (contractType.toLowerCase()) {
+      case 'truck':
+        return Icons.local_shipping;
+      case 'van':
+        return Icons.airport_shuttle;
+      default:
+        return Icons.directions_car;
+    }
+  }
+}
+
+class _StatusCheckbox extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool?> onChanged;
+
+  const _StatusCheckbox({
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: 1.2,
+      child: Checkbox(
+        value: value,
+        onChanged: onChanged,
+        activeColor: custom_green,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
     );
   }

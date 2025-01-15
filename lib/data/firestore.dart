@@ -39,11 +39,36 @@ class FirestoreDatasource {
     String rearRight,
     String transferorName,
     String transferorEmail,
+    List<bool> functionalCheckValues,
+    List<bool> carAccessoriesValues,
+    List<bool> extraFunctionalCheckValues,
+    List<bool> tankLevelValues,
+    List<bool> commentValues,
+    List<bool> tyreChangeValues,
+    List<bool> insideDamageValues,
+    List<bool> smokyVehicleValues,
+    List<bool> tyreTypes,
 
     
     // After Journey Data
-    String finalMileage,
-    String finalRemarks,
+    String endDate,
+    String endTime,
+    String endStreet,
+    String endStreetNo,
+    String endPlz,
+    String endCity,
+    String endKeyNo,
+    String endMileage,
+    String transfereeName,
+    String transfereeMail,
+    String transfereeStreet,
+    String transfereeHouseNo,
+    String transfereePlz,
+    String transfereeCity,
+    String transfereeLand,
+    String transfereeDob,
+    String transfereeId,
+    String transfereeIdValidity,
 
   ) async {
     try {
@@ -75,12 +100,38 @@ class FirestoreDatasource {
         "rearRight": rearRight,
         "transferorName": transferorName,
         "transferorEmail": transferorEmail,
+        "functionalCheckValues": functionalCheckValues,
+        "carAccessoriesValues": carAccessoriesValues,
+        "extraFunctionalCheckValues": extraFunctionalCheckValues,
+        "tankLevelValues": tankLevelValues,
+        "commentValues": commentValues,
+        "tyreChangeValues": tyreChangeValues,
+        "insideDamageValues": insideDamageValues,
+        "smokyVehicleValues": smokyVehicleValues,
+        "tyreTypes": tyreTypes,
         
         
         
         // After Journey Fields (initially empty)
-        "finalMileage": finalMileage,
-        "finalRemarks": finalRemarks,
+        "endDate": endDate,
+        "endTime": endTime,
+        "endStreet": endStreet,
+        "endStreetNo": endStreetNo,
+        "endPlz": endPlz,
+        "endCity": endCity,
+        "endKeyNo": endKeyNo,
+        "endMileage": endMileage,
+        "transfereeName": transfereeName,
+        "transfereeMail": transfereeMail,
+        "transfereeStreet": transfereeStreet,
+        "transfereeHouseNo": transfereeHouseNo,
+        "transfereePlz": transfereePlz,
+        "transfereeCity": transfereeCity,
+        "transfereeLand": transfereeLand,
+        "transfereeDob": transfereeDob,
+        "transfereeId": transfereeId,
+        "transfereeIdValidity": transfereeIdValidity,
+
       });
       return true;
     } catch (e) {
@@ -90,8 +141,27 @@ class FirestoreDatasource {
 
   Future<bool> updateContractAfterJourney(
     String uuid, // You'll need the contract's ID to update it
-    String finalMileage,
-    String finalRemarks,
+    String endDate,
+    String endTime,
+    String endStreet,
+    String endStreetNo,
+    String endPlz,
+    String endCity,
+    String endKeyNo,
+    String endMileage,
+    String transfereeName,
+    String transfereeMail,
+    String transfereeStreet,
+    String transfereeHouseNo,
+    String transfereePlz,
+    String transfereeCity,
+    String transfereeLand,
+    String transfereeDob,
+    String transfereeId,
+    String transfereeIdValidity,
+
+
+
   ) async {
     try {
       DateTime data = DateTime.now();
@@ -104,8 +174,28 @@ class FirestoreDatasource {
         'isDon': true, // Mark the contract as completed
         'isJourneyCompleted': true,
         'completionTime': '${data.hour}:${data.minute}',
-        'finalMileage': finalMileage,
-        'finalRemarks': finalRemarks,
+        'endDate': endDate,
+        'endTime': endTime,
+        'endStreet': endStreet,
+        'endStreetNo': endStreetNo,
+        'endPlz': endPlz,
+        'endCity': endCity,
+        'endKeyNo': endKeyNo,
+        'endMileage': endMileage,
+        'transfereeName': transfereeName,
+        'transfereeMail': transfereeMail,
+        'transfereeStreet': transfereeStreet,
+        'transfereeHouseNo': transfereeHouseNo,
+        'transfereePlz': transfereePlz,
+        'transfereeCity': transfereeCity,
+        'transfereeLand': transfereeLand,
+        'transfereeDob': transfereeDob,
+        'transfereeId': transfereeId,
+        'transfereeIdValidity': transfereeIdValidity,
+
+
+
+
       });
       return true;
     } catch (e) {
@@ -116,15 +206,53 @@ class FirestoreDatasource {
 
   Future<bool> completeContract(
     String uuid,
-    String finalMileage,
-    String finalRemarks,
+    String endDate,
+    String endTime,
+    String endStreet,
+    String endStreetNo,
+    String endPlz,
+    String endCity,
+    String endKeyNo,
+    String endMileage,
+    String transfereeName,
+    String transfereeMail,
+    String transfereeStreet,
+    String transfereeHouseNo,
+    String transfereePlz,
+    String transfereeCity,
+    String transfereeLand,
+    String transfereeDob,
+    String transfereeId,
+    String transfereeIdValidity,
+
+
+
+
   ) async {
     try {
       await _firestore.collection('users').doc(_auth.currentUser!.uid).collection('contracts').doc(uuid).update({
         "isJourneyCompleted": true,
         "isDon": true,
-        "finalMileage": finalMileage,
-        "finalRemarks": finalRemarks,
+        "endDate": endDate,
+        "endTime": endTime,
+        "endStreet": endStreet,
+        "endStreetNo": endStreetNo,
+        "endPlz": endPlz,
+        "endCity": endCity,
+        "endKeyNo": endKeyNo,
+        "endMileage": endMileage,
+        "transfereeName": transfereeName,
+        "transfereeMail": transfereeMail,
+        "transfereeStreet": transfereeStreet,
+        "transfereeHouseNo": transfereeHouseNo,
+        "transfereePlz": transfereePlz,
+        "transfereeCity": transfereeCity,
+        "transfereeLand": transfereeLand,
+        "transfereeDob": transfereeDob,
+        "transfereeId": transfereeId,
+        "transfereeIdValidity": transfereeIdValidity,
+
+
       });
       return true;
     } catch (e) {
@@ -136,6 +264,44 @@ class FirestoreDatasource {
     try {
       final contractList = snapshot.data.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
+
+        // Convert the functionalCheckValues from List<dynamic> to List<bool>
+      List<bool> functionalChecks = (data['functionalCheckValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> carAccessories = (data['carAccessoriesValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> extraFunctionalCheck = (data['extraFunctionalCheckValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> tankLevel = (data['tankLevelValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> comments = (data['commentValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> tyreChange = (data['tyreChangeValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> insideDamage = (data['insideDamageValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> smokyVehicle = (data['smokyVehicleValues'] as List)
+          .map((item) => item as bool)
+          .toList();
+
+      List<bool> tyreTypes = (data['tyreTypes'] as List)
+          .map((item) => item as bool)
+          .toList();
+
         return Contract(
           data['id'],
           data['driverName'],
@@ -155,15 +321,40 @@ class FirestoreDatasource {
           data['rearRight'],
           data['transferorName'],
           data['transferorEmail'],
+          functionalChecks,
+          carAccessories,
+          extraFunctionalCheck,
+          tankLevel,
+          comments,
+          tyreChange,
+          insideDamage,
+          smokyVehicle,
+          tyreTypes,
 
 
 
           data['isDon'],
 
           // Add after journey fields
-          data['finalMileage'],
-          data['finalRemarks'],
-          
+          data['endDate'],
+          data['endTime'],
+          data['endStreet'],
+          data['endStreetNo'],
+          data['endPlz'],
+          data['endCity'],
+          data['endKeyNo'],
+          data['endMileage'],
+          data['transfereeName'],
+          data['transfereeMail'],
+          data['transfereeStreet'],
+          data['transfereeHouseNo'],
+          data['transfereePlz'],
+          data['transfereeCity'],
+          data['transfereeLand'],
+          data['transfereeDob'],
+          data['transfereeId'],
+          data['transfereeIdValidity'],
+
         );
       }).toList();
       return contractList;
@@ -199,8 +390,8 @@ class FirestoreDatasource {
 
     // Before Journey Data
     String driverName, 
-    String  vehicleType, 
-    String  licensePlate, 
+    String vehicleType, 
+    String licensePlate, 
     String date,
     String startTime,
     String street,
@@ -215,12 +406,40 @@ class FirestoreDatasource {
     String rearRight,
     String transferorName,
     String transferorEmail,
+    List<bool> functionalCheckValues,
+    List<bool> carAccessoriesValues,
+    List<bool> extraFunctionalCheckValues,
+    List<bool> tankLevelValues,
+    List<bool> commentValues,
+    List<bool> tyreChangeValues,
+    List<bool> insideDamageValues,
+    List<bool> smokyVehicleValues,
+    List<bool> tyreTypes,
 
 
 
     // After Journey Data
-    String finalMileage,
-    String finalRemarks,
+    String endDate,
+    String endTime,
+    String endStreet,
+    String endStreetNo,
+    String endPlz,
+    String endCity,
+    String endKeyNo,
+    String endMileage,
+    String transfereeName,
+    String transfereeMail,
+    String transfereeStreet,
+    String transfereeHouseNo,
+    String transfereePlz,
+    String transfereeCity,
+    String transfereeLand,
+    String transfereeDob,
+    String transfereeId,
+    String transfereeIdValidity,
+
+
+
   ) async {
     try{
       DateTime data = DateTime.now();
@@ -245,13 +464,38 @@ class FirestoreDatasource {
         'rearRight': rearRight,
         'transferorName': transferorName,
         'transferorEmail': transferorEmail,
+        'functionalCheckValues': functionalCheckValues,
+        'carAccessoriesValues': carAccessoriesValues,
+        'extraFunctionalCheckValues': extraFunctionalCheckValues,
+        'tankLevelValues': tankLevelValues,
+        'commentValues': commentValues,
+        'tyreChangeValues': tyreChangeValues,
+        'insideDamageValues': insideDamageValues,
+        'smokyVehicleValues': smokyVehicleValues,
+        'tyreTypes': tyreTypes,
 
 
 
 
         // After Journey Fields
-        'finalMileage': finalMileage,
-        'finalRemarks': finalRemarks,
+        'endDate': endDate,
+        'endTime': endTime,
+        'endStreet': endStreet,
+        'endStreetNo': endStreetNo,
+        'endPlz': endPlz,
+        'endCity': endCity,
+        'endKeyNo': endKeyNo,
+        'endMileage': endMileage,
+        'transfereeName': transfereeName,
+        'transfereeMail': transfereeMail,
+        'transfereeStreet': transfereeStreet,
+        'transfereeHouseNo': transfereeHouseNo,
+        'transfereePlz': transfereePlz,
+        'transfereeCity': transfereeCity,
+        'transfereeLand': transfereeLand,
+        'transfereeDob': transfereeDob,
+        'transfereeId': transfereeId,
+        'transfereeIdValidity': transfereeIdValidity,
 
       });
       return true;

@@ -14,44 +14,78 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
-
   final email = TextEditingController();
   final password = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _focusNode1.addListener(() {setState(() {
-      
+    _focusNode1.addListener(() {
+      setState(() {});
     });
-    });
-
-    super.initState();
-    _focusNode2.addListener(() {setState(() {
-      
-    });
+    _focusNode2.addListener(() {
+      setState(() {});
     });
   }
 
   @override
+  void dispose() {
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final size = MediaQuery.of(context).size;
+    final bool isSmallScreen = size.width < 600;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              lottie(),
-              const SizedBox(height: 50),
-              textfield(email , _focusNode1, 'Email', Icons.email),
-              const SizedBox(height: 10),
-              textfield(password, _focusNode2, 'Password', Icons.password),
-              const SizedBox(height: 10),
-              sign_up(),
-              const SizedBox(height: 50),
-              login_button()
-            ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 600, // Maximum width for larger screens
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isSmallScreen ? 15 : size.width * 0.05,
+                  vertical: 20,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Responsive Lottie animation
+                    SizedBox(
+                      height: isSmallScreen ? size.height * 0.2 : 200,
+                      child: Lottie.asset(
+                        'images/login.json',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    
+                    // Form fields
+                    textfield(email, _focusNode1, 'Email', Icons.email),
+                    const SizedBox(height: 16),
+                    textfield(password, _focusNode2, 'Password', Icons.password),
+                    const SizedBox(height: 16),
+                    
+                    // Sign up text
+                    sign_up(),
+                    SizedBox(height: size.height * 0.05),
+                    
+                    // Login button
+                    login_button(),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -59,113 +93,91 @@ class _LoginState extends State<Login> {
   }
 
   Widget sign_up() {
-    return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text(
-                    'Don\'t have an account?',
-                    style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    onTap: widget.show,
-                    child: Text(
-                      'Sign Up Here',
-                      style: TextStyle(
-                      color: custom_green,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const Text(
+          'Don\'t have an account?',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 5),
+        GestureDetector(
+          onTap: widget.show,
+          child: Text(
+            'Sign Up Here',
+            style: TextStyle(
+              color: custom_green,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget login_button() {
-    return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: GestureDetector(
-                onTap: () {
-                  AuthenticationRemote().login(email.text, password.text);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: custom_green,
-                    borderRadius: BorderRadius.circular(15)
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () {
+          AuthenticationRemote().login(email.text, password.text);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: custom_green,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        child: const Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
 
   Widget textfield(TextEditingController controller, FocusNode focusNode, String typeName, IconData iconss) {
-    return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  style: const TextStyle(fontSize: 18, color: Colors.black),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(iconss , color: focusNode.hasFocus? custom_green : Colors.grey),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 15, 
-                      vertical: 15
-                    ),
-                    hintText: 'typeName',
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(color: Colors.white, width: 2.0
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        color: custom_green, width: 2.0
-                    ),
-                  ),
-                ),
-              ),
-              )
-            );
-  }
-
-  Widget lottie() {
-    return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: Lottie.asset(
-                  'images/login.json',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
+    return TextFormField(
+      controller: controller,
+      focusNode: focusNode,
+      style: const TextStyle(fontSize: 16, color: Colors.black),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        prefixIcon: Icon(
+          iconss,
+          color: focusNode.hasFocus ? custom_green : Colors.grey,
+        ),
+        hintText: typeName,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 15,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(
+            color: Colors.white,
+            width: 2.0,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: custom_green,
+            width: 2.0,
+          ),
+        ),
+      ),
+    );
   }
 }
